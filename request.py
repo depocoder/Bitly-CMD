@@ -18,9 +18,9 @@ def shorten_link(bitly_token,user_url):
     payload = { "long_url" : user_url }
 
     response = requests.post(link, headers = AUTH_HEADERS, json = payload)
-    bitlink = (response.json())
-
     response.raise_for_status()
+
+    bitlink = (response.json())
     return bitlink["id"]
 
 
@@ -36,9 +36,9 @@ def counter_link(bitly_token,user_url):
     payload = {"unit":'week', 'units': -1}
 
     response = requests.get(link, headers = AUTH_HEADERS, params = payload)
-    count_clicks = response.json()
-
     response.raise_for_status()
+
+    count_clicks = response.json()
     return count_clicks["total_clicks"]
     
 
