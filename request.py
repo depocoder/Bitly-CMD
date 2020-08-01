@@ -2,23 +2,20 @@ import requests
 from dotenv import load_dotenv
 import  os
 
-load_dotenv()
-BITLY_TOKEN=os.getenv('USER_TOKEN')
 
 # Please, read OpenAPI specification: https://dev.bitly.com/v4/v4.json
 # OpenAPI editor (ignore errors): https://editor.swagger.io/
-USER_URL = input('Введите ссылку которую хотите сократить или узнать переходы: ')
-BITLY_URL = 'https://api-ssl.bitly.com/v4'
-AUTH_HEADERS = { 'Authorization' : f"Bearer {BITLY_TOKEN}" }
 
-def shorten_link():
+
+def shorten_link(bitly_token,user_url):
+    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
     '''
         - https://dev.bitly.com/v4/#operation/createBitlink
         
     '''
     
-    link = f'{BITLY_URL}/bitlinks'
-    payload = { "long_url" : USER_URL }
+    link = 'https://api-ssl.bitly.com/v4/bitlinks'
+    payload = { "long_url" : user_url }
 
     response = requests.post(link, headers = AUTH_HEADERS, json = payload)
     bitlink = (response.json())
@@ -27,14 +24,15 @@ def shorten_link():
     return bitlink["id"]
 
 
-def counter_link():
+def counter_link(bitly_token,user_url):
+    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
     
     '''
         - https://dev.bitly.com/v4/#operation/getClicksForBitlink
         
     '''
 
-    link = f'{BITLY_URL}/bitlinks/{USER_URL}/clicks/summary'
+    link = f'{BITLY_URL}/bitlinks/{user_url}/clicks/summary'
     payload = {"unit":'week', 'units': -1}
 
     response = requests.get(link, headers = AUTH_HEADERS, params = payload)
@@ -45,17 +43,22 @@ def counter_link():
     
 
 if __name__ == '__main__':
-    if USER_URL.startswith('bit'):
+
+    load_dotenv()
+    bitly_token = os.getenv('USER_TOKEN')
+    user_url = input('Введите ссылку которую хотите сократить или узнать переходы: ')
+
+    if user_url.startswith('bit'):
         try: 
-            counter_link()
+            counter_link(bitly_token,user_url)
         except requests.exceptions.HTTPError:
             print('ОШИБКА. Ваша biy.ly ссылка не корректная!\nВведите ссылку в формате "bit.ly/30iqvat".')
         else:
-            print(f'Количество переходов по вашей ссылке {USER_URL}: {counter_link()}')
+            print(f'Количество переходов по вашей ссылке {user_url}: {counter_link(bitly_token,user_url)}')
     else:
         try: 
-            shorten_link()
+            shorten_link(bitly_token,user_url)
         except requests.exceptions.HTTPError:
             print('ОШИБКА. Ваша ссылка не корректная!\nВведите ссылку в формате "https://dvmn.org/modules/"')
         else:
-            print(f'Ваш битлинк: {shorten_link()}' )
+            print(f'Ваш битлинк: {shorten_link(bitly_token,user_url)}' )
