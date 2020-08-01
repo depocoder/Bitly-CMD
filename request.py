@@ -9,10 +9,14 @@ import  os
 
 def shorten_link(bitly_token,user_url):
     AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
-    '''
-        - https://dev.bitly.com/v4/#operation/createBitlink
-        
-    '''
+
+    '''Функция создает битлинки
+    Документация - https://dev.bitly.com/v4/#operation/createBitlink
+
+    Ключевые аргументы:
+    bitly_token -- Токен пользователя сервиса bitly
+    user_url -- ссылкка пользователя для сокращения
+    возвращаемое значение строка битлинка'''
     
     link = 'https://api-ssl.bitly.com/v4/bitlinks'
     payload = { "long_url" : user_url }
@@ -27,10 +31,13 @@ def shorten_link(bitly_token,user_url):
 def counter_link(bitly_token,user_url):
     AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
     
-    '''
-        - https://dev.bitly.com/v4/#operation/getClicksForBitlink
-        
-    '''
+    '''Функция считывает переходы по битлинку
+    Документация - https://dev.bitly.com/v4/#operation/getClicksForBitlink
+
+    Ключевые аргументы:
+    bitly_token -- Токен пользователя сервиса bitly
+    user_url -- битлинк пользователя
+    возвращаемое значение количество кликов по битлинку'''
 
     link = f'{BITLY_URL}/bitlinks/{user_url}/clicks/summary'
     payload = {"unit":'week', 'units': -1}
