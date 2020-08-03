@@ -44,10 +44,12 @@ def if_bitlink(bitly_token,user_url):
 
     payload = { "bitlink_id" : user_url }
     response = requests.post(link, headers = AUTH_HEADERS, json = payload)
+    
     if response.ok:
         return 1
     else:
         return 0
+
 
 def counter_link(bitly_token,user_url):
     AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
