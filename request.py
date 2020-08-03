@@ -36,15 +36,18 @@ def if_bitlink(bitly_token,user_url):
     Ключевые аргументы:
     user_url -- ссылкка пользователя для проверки
     возвращаемое значение истина или ложь'''
-    
-    link = 'https://api-ssl.bitly.com/v4/bitlinks'
-    payload = { "long_url" : user_url }
 
-    response = requests.post(link, json = payload)
-    response.raise_for_status()
+    if user_url.find("://") != -1:
+        user_url = user_url[user_url.find("://")+2:]
 
-    url = (response.json())
-    return url
+    link = 'https://api-ssl.bitly.com/v4/expand'
+
+    payload = { "bitlink_id" : user_url }
+    response = requests.post(link, headers = AUTH_HEADERS, json = payload)
+    if response.ok:
+        return 1
+    else:
+        return 0
 
 def counter_link(bitly_token,user_url):
     AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
@@ -57,7 +60,7 @@ def counter_link(bitly_token,user_url):
     user_url -- битлинк пользователя
     возвращаемое значение количество кликов по битлинку'''
 
-    link = f'{BITLY_URL}/bitlinks/{user_url}/clicks/summary'
+    link = f'https://api-ssl.bitly.com/v4/bitlinks/{user_url}/clicks/summary'
     payload = {"unit":'week', 'units': -1}
 
     response = requests.get(link, headers = AUTH_HEADERS, params = payload)
@@ -72,8 +75,7 @@ if __name__ == '__main__':
     load_dotenv()
     bitly_token = os.getenv('USER_TOKEN')
     user_url = input('Введите ссылку которую хотите сократить или узнать переходы: ')
-
-    if user_url.startswith('bit'):
+    if if_bitlink(bitly_token,user_url):
         try: 
             counter_link(bitly_token,user_url)
         except requests.exceptions.HTTPError:
