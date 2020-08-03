@@ -27,6 +27,24 @@ def shorten_link(bitly_token,user_url):
     bitlink = (response.json())
     return bitlink["id"]
 
+def if_bitlink(bitly_token,user_url):
+    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
+
+    '''Функция проверяет битлинк ли это
+    Документация - https://dev.bitly.com/v4/#operation/expandBitlink
+
+    Ключевые аргументы:
+    user_url -- ссылкка пользователя для проверки
+    возвращаемое значение истина или ложь'''
+    
+    link = 'https://api-ssl.bitly.com/v4/bitlinks'
+    payload = { "long_url" : user_url }
+
+    response = requests.post(link, json = payload)
+    response.raise_for_status()
+
+    url = (response.json())
+    return url
 
 def counter_link(bitly_token,user_url):
     AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
