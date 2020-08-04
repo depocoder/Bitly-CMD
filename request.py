@@ -75,7 +75,7 @@ def counter_link(bitly_token,user_url):
 if __name__ == '__main__':
 
     load_dotenv()
-    bitly_token = os.getenv('USER_TOKEN')
+    bitly_token = os.getenv('BITLY_TOKEN')
     user_url = input('Введите ссылку которую хотите сократить или узнать переходы: ')
     if if_bitlink(bitly_token,user_url):
         try: 
