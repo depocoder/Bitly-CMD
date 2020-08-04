@@ -8,8 +8,6 @@ import argparse
 
 
 def shorten_link(bitly_token,user_url):
-    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
-
     '''Функция создает битлинки
     Документация - https://dev.bitly.com/v4/#operation/createBitlink
 
@@ -17,6 +15,8 @@ def shorten_link(bitly_token,user_url):
     bitly_token -- Токен пользователя сервиса bitly
     user_url -- ссылкка пользователя для сокращения
     возвращаемое значение строка битлинка'''
+
+    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
     
     link = 'https://api-ssl.bitly.com/v4/bitlinks'
     payload = { "long_url" : user_url }
@@ -28,14 +28,14 @@ def shorten_link(bitly_token,user_url):
     return bitlink["id"]
 
 def if_bitlink(bitly_token,user_url):
-    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
-
     '''Функция проверяет битлинк ли это
     Документация - https://dev.bitly.com/v4/#operation/expandBitlink
 
     Ключевые аргументы:
     user_url -- ссылкка пользователя для проверки
-    возвращаемое значение истина или ложь'''
+    возвращаемое значение: истина или ложь'''
+
+    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
 
     if user_url.find("://") != -1:
         user_url= user_url.split("://")[1]
@@ -47,8 +47,6 @@ def if_bitlink(bitly_token,user_url):
     return response.ok
 
 def count_clicks(bitly_token,user_url):
-    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
-    
     '''Функция считывает переходы по битлинку
     Документация - https://dev.bitly.com/v4/#operation/getClicksForBitlink
 
@@ -56,7 +54,8 @@ def count_clicks(bitly_token,user_url):
     bitly_token -- Токен пользователя сервиса bitly
     user_url -- битлинк пользователя
     возвращаемое значение количество кликов по битлинку'''
-    
+
+    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
     if user_url.find("://") != -1:
         user_url= user_url.split("://")[1]
 
