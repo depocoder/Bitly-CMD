@@ -14,8 +14,7 @@ pip install -r requirements.txt
 ```
     
 [Сервис Bitly](https://bit.ly/) — зарегистрируйтесь
-Создайте файл .env в него надо прописать ваш bitly token в переменную **BITLY_TOKEN** его можно получить [**тут**]   
-(https://bitly.com/a/oauth_apps)    
+Создайте файл .env в него надо прописать ваш bitly token в переменную **BITLY_TOKEN** его можно получить [**тут**](https://bitly.com/a/oauth_apps)    
     
 **Пример**  
 ```
