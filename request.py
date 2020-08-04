@@ -8,9 +8,9 @@ import argparse
 
 
 def shorten_link(bitly_token,user_url):
-    '''Функция создает битлинки
-    Документация - https://dev.bitly.com/v4/#operation/createBitlink
+    '''Функция создает битлинки.
 
+    Документация - https://dev.bitly.com/v4/#operation/createBitlink
     Ключевые аргументы:
     bitly_token -- Токен пользователя сервиса bitly
     user_url -- ссылкка пользователя для сокращения
@@ -28,9 +28,9 @@ def shorten_link(bitly_token,user_url):
     return bitlink["id"]
 
 def if_bitlink(bitly_token,user_url):
-    '''Функция проверяет битлинк ли это
-    Документация - https://dev.bitly.com/v4/#operation/expandBitlink
+    '''Функция проверяет битлинк ли это.
 
+    Документация - https://dev.bitly.com/v4/#operation/expandBitlink
     Ключевые аргументы:
     user_url -- ссылкка пользователя для проверки
     возвращаемое значение: истина или ложь'''
@@ -47,9 +47,9 @@ def if_bitlink(bitly_token,user_url):
     return response.ok
 
 def count_clicks(bitly_token,user_url):
-    '''Функция считывает переходы по битлинку
-    Документация - https://dev.bitly.com/v4/#operation/getClicksForBitlink
+    '''Функция считывает переходы по битлинку.
 
+    Документация - https://dev.bitly.com/v4/#operation/getClicksForBitlink
     Ключевые аргументы:
     bitly_token -- Токен пользователя сервиса bitly
     user_url -- битлинк пользователя
