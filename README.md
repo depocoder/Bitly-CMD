@@ -21,5 +21,6 @@ pip install -r requirements.txt
 
 ## Запуск кода.  
 ```
-python3 request.py
+python3 request.py https://dvmn.org/modules/
 ```
+**После request.py должна быть ваша ссылка**
