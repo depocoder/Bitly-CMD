@@ -38,20 +38,15 @@ def if_bitlink(bitly_token,user_url):
     возвращаемое значение истина или ложь'''
 
     if user_url.find("://") != -1:
-        user_url = user_url[user_url.find("://")+2:]
+        user_url= user_url.split("://")[1]
 
     link = 'https://api-ssl.bitly.com/v4/expand'
 
     payload = { "bitlink_id" : user_url }
     response = requests.post(link, headers = AUTH_HEADERS, json = payload)
-    
-    if response.ok:
-        return True
-    else:
-        return False
+    return response.ok
 
-
-def counter_link(bitly_token,user_url):
+def count_clicks(bitly_token,user_url):
     AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
     
     '''Функция считывает переходы по битлинку
@@ -61,6 +56,9 @@ def counter_link(bitly_token,user_url):
     bitly_token -- Токен пользователя сервиса bitly
     user_url -- битлинк пользователя
     возвращаемое значение количество кликов по битлинку'''
+    
+    if user_url.find("://") != -1:
+        user_url= user_url.split("://")[1]
 
     link = f'https://api-ssl.bitly.com/v4/bitlinks/{user_url}/clicks/summary'
     payload = {"unit":'week', 'units': -1}
@@ -68,8 +66,8 @@ def counter_link(bitly_token,user_url):
     response = requests.get(link, headers = AUTH_HEADERS, params = payload)
     response.raise_for_status()
 
-    count_clicks = response.json()
-    return count_clicks["total_clicks"]
+    about_bitlink = response.json()
+    return about_bitlink["total_clicks"]
     
 
 if __name__ == '__main__':
@@ -77,15 +75,17 @@ if __name__ == '__main__':
     parser.add_argument('url', help='Введите ссылку которую хотите сократить или узнать переходы:')
     args = parser.parse_args()
     user_url = args.url
+
     load_dotenv()
     bitly_token = os.getenv('BITLY_TOKEN')
+    
     if if_bitlink(bitly_token,user_url):
         try: 
-            counter_link(bitly_token,user_url)
+            count_clicks(bitly_token,user_url)
         except requests.exceptions.HTTPError:
             print('ОШИБКА. Ваша biy.ly ссылка не корректная!\nВведите ссылку в формате "bit.ly/30iqvat".')
         else:
-            print(f'Количество переходов по вашей ссылке {user_url}: {counter_link(bitly_token,user_url)}')
+            print(f'Количество переходов по вашей ссылке {user_url}: {count_clicks(bitly_token,user_url)}')
     else:
         try: 
             shorten_link(bitly_token,user_url)
