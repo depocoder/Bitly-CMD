@@ -24,7 +24,7 @@ def shorten_link(bitly_token,user_url):
     response = requests.post(link, headers = AUTH_HEADERS, json = payload)
     response.raise_for_status()
 
-    bitlink = (response.json())
+    bitlink = response.json()
     return bitlink["id"]
 
 def if_bitlink(bitly_token,user_url):
@@ -46,9 +46,9 @@ def if_bitlink(bitly_token,user_url):
     response = requests.post(link, headers = AUTH_HEADERS, json = payload)
     
     if response.ok:
-        return 1
+        return True
     else:
-        return 0
+        return False
 
 
 def counter_link(bitly_token,user_url):
