@@ -1,7 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import  os
-
+import argparse
 
 # Please, read OpenAPI specification: https://dev.bitly.com/v4/v4.json
 # OpenAPI editor (ignore errors): https://editor.swagger.io/
@@ -73,10 +73,12 @@ def counter_link(bitly_token,user_url):
     
 
 if __name__ == '__main__':
-
+    parser = argparse.ArgumentParser(description='Этот проект позволяет создать сокращённую ссылки. Посмотреть переходы по вашей сокращённой (bit.ly) ссылке через командную строку. ')
+    parser.add_argument('url', help='Введите ссылку которую хотите сократить или узнать переходы:')
+    args = parser.parse_args()
+    user_url = args.url
     load_dotenv()
     bitly_token = os.getenv('BITLY_TOKEN')
-    user_url = input('Введите ссылку которую хотите сократить или узнать переходы: ')
     if if_bitlink(bitly_token,user_url):
         try: 
             counter_link(bitly_token,user_url)
