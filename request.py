@@ -2,6 +2,7 @@ import requests
 from dotenv import load_dotenv
 import  os
 import argparse
+from urllib.parse import urlparse
 
 # Please, read OpenAPI specification: https://dev.bitly.com/v4/v4.json
 # OpenAPI editor (ignore errors): https://editor.swagger.io/
@@ -38,7 +39,8 @@ def if_bitlink(bitly_token,user_url):
     AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
 
     if user_url.find("://") != -1:
-        user_url= user_url.split("://")[1]
+        urlib_parce = urlparse(user_url)
+        user_url = urlib_parce.geturl(scheme='')
 
     link = 'https://api-ssl.bitly.com/v4/expand'
 
