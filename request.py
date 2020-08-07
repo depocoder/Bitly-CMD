@@ -12,10 +12,11 @@ def if_http(user_url):
     bitly_token -- Токен пользователя сервиса bitl.
     user_url -- ссылкка пользователя для сокращения.
     Возвращаемое отформотированная ссылка.'''
-        urlib_parce = urlparse(user_url)
-        urlib_parce = urlib_parce._replace(scheme='')
-        user_url = urlib_parce.geturl()[2:]
-        return user_url
+
+    urlib_parce = urlparse(user_url)
+    urlib_parce = urlib_parce._replace(scheme='')
+    user_url = urlib_parce.geturl()[2:]
+    return user_url
 
 def shorten_link(bitly_token,user_url):
     '''Функция создает битлинки.
