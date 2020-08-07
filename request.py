@@ -4,9 +4,6 @@ import  os
 import argparse
 from urllib.parse import urlparse
 
-# Please, read OpenAPI specification: https://dev.bitly.com/v4/v4.json
-# OpenAPI editor (ignore errors): https://editor.swagger.io/
-
 
 def shorten_link(bitly_token,user_url):
     '''Функция создает битлинки.
@@ -17,12 +14,12 @@ def shorten_link(bitly_token,user_url):
     user_url -- ссылкка пользователя для сокращения
     возвращаемое значение строка битлинка'''
 
-    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
+    auth_headers = { 'Authorization' : f"Bearer {bitly_token}" }
     
     link = 'https://api-ssl.bitly.com/v4/bitlinks'
     payload = { "long_url" : user_url }
 
-    response = requests.post(link, headers = AUTH_HEADERS, json = payload)
+    response = requests.post(link, headers = auth_headers, json = payload)
     response.raise_for_status()
 
     bitlink = response.json()
@@ -36,7 +33,7 @@ def if_bitlink(bitly_token,user_url):
     user_url -- ссылкка пользователя для проверки
     возвращаемое значение: истина или ложь'''
 
-    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
+    auth_headers = { 'Authorization' : f"Bearer {bitly_token}" }
 
 
     if user_url.find("://") != -1:
@@ -47,7 +44,7 @@ def if_bitlink(bitly_token,user_url):
     link = 'https://api-ssl.bitly.com/v4/expand'
 
     payload = { "bitlink_id" : user_url }
-    response = requests.post(link, headers = AUTH_HEADERS, json = payload)
+    response = requests.post(link, headers = auth_headers, json = payload)
     return response.ok
 
 def count_clicks(bitly_token,user_url):
@@ -59,7 +56,7 @@ def count_clicks(bitly_token,user_url):
     user_url -- битлинк пользователя
     возвращаемое значение количество кликов по битлинку'''
 
-    AUTH_HEADERS = { 'Authorization' : f"Bearer {bitly_token}" }
+    auth_headers = { 'Authorization' : f"Bearer {bitly_token}" }
 
     if user_url.find("://") != -1:
         urlib_parce = urlparse(user_url)
@@ -69,7 +66,7 @@ def count_clicks(bitly_token,user_url):
     link = f'https://api-ssl.bitly.com/v4/bitlinks/{user_url}/clicks/summary'
     payload = {"unit":'week', 'units': -1}
 
-    response = requests.get(link, headers = AUTH_HEADERS, params = payload)
+    response = requests.get(link, headers = auth_headers, params = payload)
     response.raise_for_status()
 
     about_bitlink = response.json()
@@ -77,8 +74,14 @@ def count_clicks(bitly_token,user_url):
     
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Этот проект позволяет создать сокращённую ссылки. Посмотреть переходы по вашей сокращённой (bit.ly) ссылке через командную строку. ')
-    parser.add_argument('url', help='Введите ссылку которую хотите сократить или узнать переходы:')
+    parser = argparse.ArgumentParser(description='''Этот проект позволяет
+                                    создать сокращённую ссылки. Посмотреть переходы 
+                                    по вашей сокращённой (bit.ly) 
+                                    ссылке через командную строку. ''')
+
+    parser.add_argument('url', help='''Введите ссылку которую хотите 
+                        сократить или узнать переходы:''')
+                        
     args = parser.parse_args()
     user_url = args.url
 
