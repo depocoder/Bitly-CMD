@@ -4,15 +4,27 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 import requests
 
+def if_http(user_url):
+    '''Функция удаляет http или https.
+
+    Документация - https://docs.python.org/3/library/urllib.parse.html#url-parsing
+    Ключевые аргументы:
+    bitly_token -- Токен пользователя сервиса bitl.
+    user_url -- ссылкка пользователя для сокращения.
+    Возвращаемое отформотированная ссылка.'''
+        urlib_parce = urlparse(user_url)
+        urlib_parce = urlib_parce._replace(scheme='')
+        user_url = urlib_parce.geturl()[2:]
+        return user_url
 
 def shorten_link(bitly_token,user_url):
     '''Функция создает битлинки.
 
     Документация - https://dev.bitly.com/v4/#operation/createBitlink
     Ключевые аргументы:
-    bitly_token -- Токен пользователя сервиса bitly
-    user_url -- ссылкка пользователя для сокращения
-    возвращаемое значение строка битлинка'''
+    bitly_token -- Токен пользователя сервиса bitly.
+    user_url -- ссылкка пользователя для сокращения.
+    возвращаемое значение строка битлинка.'''
 
     auth_headers = {'Authorization' : f"Bearer {bitly_token}"}
     link = 'https://api-ssl.bitly.com/v4/bitlinks'
@@ -27,15 +39,12 @@ def if_bitlink(bitly_token,user_url):
 
     Документация - https://dev.bitly.com/v4/#operation/expandBitlink
     Ключевые аргументы:
-    user_url -- ссылкка пользователя для проверки
-    возвращаемое значение: истина или ложь'''
+    user_url -- ссылкка пользователя для проверки.
+    возвращаемое значение: истина или ложь.'''
 
-    auth_headers = {'Authorization' : f"Bearer {bitly_token}"}
     if user_url.find("://") != -1:
-        urlib_parce = urlparse(user_url)
-        urlib_parce = urlib_parce._replace(scheme='')
-        user_url = urlib_parce.geturl()[2:]
-
+        user_url = if_http(user_url)
+    auth_headers = {'Authorization' : f"Bearer {bitly_token}"}
     link = 'https://api-ssl.bitly.com/v4/expand'
     payload = {"bitlink_id" : user_url}
     response = requests.post(link, headers = auth_headers, json = payload)
@@ -46,16 +55,13 @@ def count_clicks(bitly_token,user_url):
 
     Документация - https://dev.bitly.com/v4/#operation/getClicksForBitlink
     Ключевые аргументы:
-    bitly_token -- Токен пользователя сервиса bitly
-    user_url -- битлинк пользователя
-    возвращаемое значение количество кликов по битлинку'''
+    bitly_token -- Токен пользователя сервиса bitly.
+    user_url -- битлинк пользователя.
+    возвращаемое значение количество кликов по битлинку.'''
 
     auth_headers = {'Authorization' : f"Bearer {bitly_token}"}
     if user_url.find("://") != -1:
-        urlib_parce = urlparse(user_url)
-        urlib_parce = urlib_parce._replace(scheme='')
-        user_url = urlib_parce.geturl()[2:]
-    
+        user_url = if_http(user_url)
     link = f'https://api-ssl.bitly.com/v4/bitlinks/{user_url}/clicks/summary'
     payload = {"unit":'week', 'units': -1}
     response = requests.get(link, headers = auth_headers, params = payload)
