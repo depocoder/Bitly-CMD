@@ -84,23 +84,19 @@ if __name__ == '__main__':
                         
     args = parser.parse_args()
     user_url = args.url
-
-
     load_dotenv()
     bitly_token = os.getenv('BITLY_TOKEN')
-    shorten_url = shorten_link(bitly_token,user_url)
-    counter_link = count_clicks(bitly_token,user_url)
     if if_bitlink(bitly_token,user_url):
         try: 
             count_clicks(bitly_token,user_url)
         except requests.exceptions.HTTPError:
             print('ОШИБКА. Ваша biy.ly ссылка не корректная!\nВведите ссылку в формате "bit.ly/30iqvat".')
         else:
-            print(f'Количество переходов по вашей ссылке {user_url}: {counter_link}')
+            print(f'Количество переходов по вашей ссылке {user_url}: {count_clicks(bitly_token,user_url)}')
     else:
         try: 
             shorten_link(bitly_token,user_url)
         except requests.exceptions.HTTPError:
             print('ОШИБКА. Ваша ссылка не корректная!\nВведите ссылку в формате "https://dvmn.org/modules/"')
         else:
-            print(f'Ваш битлинк: {shorten_url}' )
+            print(f'Ваш битлинк: {shorten_link(bitly_token,user_url)}' )
