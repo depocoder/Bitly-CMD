@@ -14,14 +14,11 @@ def shorten_link(bitly_token,user_url):
     user_url -- ссылкка пользователя для сокращения
     возвращаемое значение строка битлинка'''
 
-    auth_headers = { 'Authorization' : f"Bearer {bitly_token}" }
-    
+    auth_headers = {'Authorization' : f"Bearer {bitly_token}"}
     link = 'https://api-ssl.bitly.com/v4/bitlinks'
-    payload = { "long_url" : user_url }
-
+    payload = {"long_url" : user_url}
     response = requests.post(link, headers = auth_headers, json = payload)
     response.raise_for_status()
-
     bitlink = response.json()
     return bitlink["id"]
 
@@ -33,17 +30,14 @@ def if_bitlink(bitly_token,user_url):
     user_url -- ссылкка пользователя для проверки
     возвращаемое значение: истина или ложь'''
 
-    auth_headers = { 'Authorization' : f"Bearer {bitly_token}" }
-
-
+    auth_headers = {'Authorization' : f"Bearer {bitly_token}"}
     if user_url.find("://") != -1:
         urlib_parce = urlparse(user_url)
         urlib_parce = urlib_parce._replace(scheme='')
         user_url = urlib_parce.geturl()[2:]
 
     link = 'https://api-ssl.bitly.com/v4/expand'
-
-    payload = { "bitlink_id" : user_url }
+    payload = {"bitlink_id" : user_url}
     response = requests.post(link, headers = auth_headers, json = payload)
     return response.ok
 
@@ -56,8 +50,7 @@ def count_clicks(bitly_token,user_url):
     user_url -- битлинк пользователя
     возвращаемое значение количество кликов по битлинку'''
 
-    auth_headers = { 'Authorization' : f"Bearer {bitly_token}" }
-
+    auth_headers = {'Authorization' : f"Bearer {bitly_token}"}
     if user_url.find("://") != -1:
         urlib_parce = urlparse(user_url)
         urlib_parce = urlib_parce._replace(scheme='')
@@ -65,22 +58,21 @@ def count_clicks(bitly_token,user_url):
     
     link = f'https://api-ssl.bitly.com/v4/bitlinks/{user_url}/clicks/summary'
     payload = {"unit":'week', 'units': -1}
-
     response = requests.get(link, headers = auth_headers, params = payload)
     response.raise_for_status()
-
     about_bitlink = response.json()
     return about_bitlink["total_clicks"]
     
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='''Этот проект позволяет
-                                    создать сокращённую ссылки. Посмотреть переходы 
-                                    по вашей сокращённой (bit.ly) 
-                                    ссылке через командную строку. ''')
+    parser = argparse.ArgumentParser(
+        description='''Этот проект позволяет создать сокращённую ссылки.
+        Посмотреть переходы по вашей сокращённой (bit.ly) ссылке 
+        через командную строку.''')
 
-    parser.add_argument('url', help='''Введите ссылку которую хотите 
-                        сократить или узнать переходы:''')
+    parser.add_argument(
+        'url', help='''Введите ссылку которую хотите 
+        сократить или узнать переходы:''')
                         
     args = parser.parse_args()
     user_url = args.url
@@ -99,4 +91,4 @@ if __name__ == '__main__':
         except requests.exceptions.HTTPError:
             print('ОШИБКА. Ваша ссылка не корректная!\nВведите ссылку в формате "https://dvmn.org/modules/"')
         else:
-            print(f'Ваш битлинк: {shorten_link(bitly_token,user_url)}' )
+            print(f'Ваш битлинк: {shorten_link(bitly_token,user_url)}')
