@@ -1,8 +1,8 @@
-import requests
-from dotenv import load_dotenv
 import  os
 import argparse
+from dotenv import load_dotenv
 from urllib.parse import urlparse
+import requests
 
 
 def shorten_link(bitly_token,user_url):
