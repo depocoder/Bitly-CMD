@@ -10,13 +10,12 @@ def format_url(user_url):
 
     Docs - https://docs.python.org/3/library/urllib.parse.html#url-parsing
     Ключевые аргументы:
-    bitly_token -- Токен пользователя сервиса bitl.
     user_url -- ссылкка пользователя для сокращения.
     Возвращаемое отформотированная ссылка.'''
 
-    urlib_parce = urlparse(user_url)
-    urlib_parce = urlib_parce._replace(scheme='')
-    user_url = urlib_parce.geturl()[2:]
+    url_info = urlparse(user_url)
+    url_info = url_info._replace(scheme='')
+    user_url = url_info.geturl()[2:]
     return user_url
 
 
